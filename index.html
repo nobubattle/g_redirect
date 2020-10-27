@@ -48,7 +48,7 @@
             if(r&&r.length>=2){
                 document.getElementById('div2').classList.remove('d-none');
                 setTimeout(function(){
-                    window.open("https://gtv.org/"+r[1],"_self");
+                    window.open("https://gtv.org/"+unescape(r[1]),"_self");
                 },3000);
                 return ;
             }
@@ -57,7 +57,7 @@
             if(r&&r.length>=2){
                 document.getElementById('div2').classList.remove('d-none');
                 setTimeout(function(){
-                    window.open("https://gnews.org/"+r[1],"_self");
+                    window.open("https://gnews.org/"+unescape(r[1]),"_self");
                 },3000);
                 return ;
             }
