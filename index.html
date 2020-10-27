@@ -3,12 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love & Peace</title>
-    <script>
-    </script>
+    <title>Redirect</title>
+    <style>
+        .d-none{  display:none;  }
+        .text-center{text-align:center}
+        .w-80{width:80%;}
+    </style>
 </head>
 <body>
-    <div><input type="text" id="txtUrl"> <button type="button" id="btnConvert">Convert</button></div>
-    <div><input type="text" id="txtResult"></div>
+    <div class="d-none text-center" id="div1">
+        <br><br>
+        <input type="text" id="url" class="w-80" value="https://gtv.org//?videoid=5f976a6c384a485bd95fedde"> <br><br>
+        <button type="button" id="btn">Convert</button><br><br>
+        <input type="text" id="url2" class="w-80"></div>
+    </div>
+    <div class="d-none text-center" id="div2">
+        Redirect after 3 seconds.
+    </div>
+    <script>
+        var el_btn = document.getElementById('btn');
+        var el_url = document.getElementById('url');
+        var el_url2 = document.getElementById('url2');
+        var exp1 = /https:\/\/gtv\.org\/(.+)/;
+        var exp2 = /https:\/\/gnews\.org\/(.+)/;
+        var r ;
+
+        el_btn.addEventListener('click', function(){
+            
+            r = el_url.value.match(exp1);
+            if(r&&r.length>=2){
+                url2.value = "https://nobubattle.github.io/g_redirect/?gtv="+r[1];
+                return ;
+            }
+            
+            r = el_url.value.match(exp2);
+            if(r&&r.length>=2){
+                url2.value = "https://nobubattle.github.io/g_redirect/?gnews="+r[1];
+                return ;
+            }
+        });
+
+        (function(){
+            r = window.location.search.match(/\?gtv=(.+)/);
+            if(r&&r.length>=2){
+                document.getElementById('div2').classList.remove('d-none');
+                setTimeout(function(){
+                    window.open("https://gtv.org/"+r[1],"_self");
+                },3000);
+                return ;
+            }
+            
+            r = window.location.search.match(/\?gnews=(.+)/);
+            if(r&&r.length>=2){
+                document.getElementById('div2').classList.remove('d-none');
+                setTimeout(function(){
+                    window.open("https://gnews.org/"+r[1],"_self");
+                },3000);
+                return ;
+            }
+            document.getElementById('div1').classList.remove('d-none');
+        })();
+        
+    </script>
 </body>
 </html>
