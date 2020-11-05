@@ -35,15 +35,15 @@
         var r ;
         var rules = [
             {
-                convert_exp:/https:\/\/gtv\.org\/(.+)/,
+                convert_exp:/https:\/\/gtv\.org(\/?.*)/,
                 convert_url:"https://nobubattle.github.io/g_redirect/?gtv=",
-                redirect_exp:/\?gtv=(.+)/,
+                redirect_exp:/\?gtv=(.*)/,
                 redirect_url:"https://gtv.org/"
             },
             {
-                convert_exp:/https:\/\/gnews\.org\/(.+)/,
+                convert_exp:/https:\/\/gnews\.org(\/?.*)/,
                 convert_url:"https://nobubattle.github.io/g_redirect/?gnews=",
-                redirect_exp:/\?gnews=(.+)/,
+                redirect_exp:/\?gnews=(.*)/,
                 redirect_url:"https://gnews.org/"
             }
         ];
