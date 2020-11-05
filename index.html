@@ -52,7 +52,7 @@
             for(i=0;i<rules.length;i++){
                 r = el_url.value.match(rules[i].convert_exp);
                 if(r&&r.length>=2){
-                    url2.value = rules[i].convert_url+r[1];
+                    url2.value = rules[i].convert_url+escape(r[1]);
                     break;
                 }
             }
