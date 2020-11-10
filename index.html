@@ -9,14 +9,16 @@
         .text-center{text-align:center}
         .w-80{width:80%;}
         .my-3{margin-top:16px;margin-bottom:16px}
+        .form-input{height:24px;font-size:16px;}
+        .btn{ height:24px;font-size:16px;}
     </style>
 </head>
 <body>
     <div class="text-center my-3" id="div1">
         <br><br>
-        <input type="text" id="url" class="w-80"> <br><br>
-        <button type="button" id="btn">Convert</button><br><br>
-        <input type="text" id="url2" class="w-80"></div>
+        <input type="text" id="url" class="form-input w-80"> <br><br>
+        <button type="button" id="btn" class="btn">Convert &amp; Copy</button><br><br>
+        <input type="text" id="url2" class="form-input w-80"></div>
     </div>
     <div class="d-none text-center my-3" id="div2">
         Show redirect button after 3 seconds.
@@ -24,55 +26,63 @@
     <div class="d-none text-center my-3" id="div3">
         <a id="link" href="" target="_self">click me to redirect</a>
     </div>
-    <script>
-        var el_btn = document.getElementById('btn');
-        var el_url = document.getElementById('url');
-        var el_url2 = document.getElementById('url2');
-        var el_link = document.getElementById('link');
-        var el_div1 = document.getElementById('div1');
-        var el_div2 = document.getElementById('div2');
-        var el_div3 = document.getElementById('div3');
-        var r ;
-        var rules = [
-            {
-                convert_exp:/https:\/\/gtv\.org(\/?.*)/,
-                convert_url:"https://nobubattle.github.io/g_redirect/?gtv=",
-                redirect_exp:/\?gtv=(.*)/,
-                redirect_url:"https://gtv.org/"
-            },
-            {
-                convert_exp:/https:\/\/gnews\.org(\/?.*)/,
-                convert_url:"https://nobubattle.github.io/g_redirect/?gnews=",
-                redirect_exp:/\?gnews=(.*)/,
-                redirect_url:"https://gnews.org/"
-            }
-        ];
 
-        el_btn.addEventListener('click', function(){
-            for(i=0;i<rules.length;i++){
-                r = el_url.value.match(rules[i].convert_exp);
-                if(r&&r.length>=2){
-                    url2.value = rules[i].convert_url+escape(r[1]);
-                    break;
-                }
-            }
-        });
+<script>
+var el_btn = document.getElementById('btn');
+var el_url = document.getElementById('url');
+var el_url2 = document.getElementById('url2');
+var el_link = document.getElementById('link');
+var el_div1 = document.getElementById('div1');
+var el_div2 = document.getElementById('div2');
+var el_div3 = document.getElementById('div3');
+var r ;
+var rules = [
+    {
+        convert_exp:/https:\/\/gtv\.org\/?(.*)/,
+        convert_url:"https://nobubattle.github.io/g_redirect/?gtv=",
+        redirect_exp:/\?gtv=\/?(.*)/,
+        redirect_url:"https://gtv.org/"
+    },
+    {
+        convert_exp:/https:\/\/gnews\.org\/?(.*)/,
+        convert_url:"https://nobubattle.github.io/g_redirect/?gnews=",
+        redirect_exp:/\?gnews=\/?(.*)/,
+        redirect_url:"https://gnews.org/"
+    }
+];
 
-        (function(){
-            for(i=0;i<rules.length;i++){
-                r = window.location.search.match(rules[i].redirect_exp);
-                if(r&&r.length>=2){
-                    setTimeout(function(){
-                        el_link.href = rules[i].redirect_url+unescape(r[1]).replace(/&fbclid=.*/,"");
-                        el_div3.classList.remove('d-none');
-                    },3000);
-                    el_div1.classList.add('d-none');
-                    el_div2.classList.remove('d-none');
-                    break ;
-                }
+(function(){
+
+    el_btn.addEventListener('click', function(){
+        for(i=0;i<rules.length;i++){
+            r = el_url.value.match(rules[i].convert_exp);
+            if(r&&r.length>=2){
+                el_url2.value = rules[i].convert_url+escape(r[1]);
+                click2copy();
+                break;
             }
-        })();
-        
-    </script>
+        }
+    });
+
+    for(i=0;i<rules.length;i++){
+        r = window.location.search.match(rules[i].redirect_exp);
+        if(r&&r.length>=2){
+            setTimeout(function(){
+                el_link.href = rules[i].redirect_url+unescape(r[1]).replace(/&fbclid=.*/,"");
+                el_div3.classList.remove('d-none');
+            },3000);
+            el_div1.classList.add('d-none');
+            el_div2.classList.remove('d-none');
+            break ;
+        }
+    }
+})();
+    
+function click2copy() {
+    el_url2.select();
+    el_url2.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+}
+</script>
 </body>
 </html>
