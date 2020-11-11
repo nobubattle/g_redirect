@@ -37,39 +37,53 @@ var el_div1 = document.getElementById('div1');
 var el_div2 = document.getElementById('div2');
 var el_div3 = document.getElementById('div3');
 var r ;
-var rules = [
+var in_rules = [
     {
-        convert_exp:/https:\/\/gtv\.org\/?(.*)/,
-        convert_url:"https://nobubattle.github.io/g_redirect/?gtv=",
-        redirect_exp:/\?gtv=\/?(.*)/,
-        redirect_url:"https://gtv.org/"
+        exp:/https:\/\/gtv\.org\/?\?videoid=(.*)/,
+        url:"https://nobubattle.github.io/g_redirect/?gtv=video/id=",
     },
     {
-        convert_exp:/https:\/\/gnews\.org\/?(.*)/,
-        convert_url:"https://nobubattle.github.io/g_redirect/?gnews=",
-        redirect_exp:/\?gnews=\/?(.*)/,
-        redirect_url:"https://gnews.org/"
+        exp:/https:\/\/gtv\.org\/?(.*)/,
+        url:"https://nobubattle.github.io/g_redirect/?gtv=",
+    },
+    {
+        exp:/https:\/\/gnews\.org\/?(.*)/,
+        url:"https://nobubattle.github.io/g_redirect/?gnews=",
+    }
+];
+var out_rules = [
+    {
+        exp:/\?gtv=\/?%3Fvideoid%3D(.*)/,
+        url:"https://gtv.org/video/id="
+    },
+    {
+        exp:/\?gtv=\/?(.*)/,
+        url:"https://gtv.org/"
+    },
+    {
+        exp:/\?gnews=\/?(.*)/,
+        url:"https://gnews.org/"
     }
 ];
 
 (function(){
 
     el_btn.addEventListener('click', function(){
-        for(i=0;i<rules.length;i++){
-            r = el_url.value.match(rules[i].convert_exp);
+        for(i=0;i<in_rules.length;i++){
+            r = el_url.value.match(in_rules[i].exp);
             if(r&&r.length>=2){
-                el_url2.value = rules[i].convert_url+escape(r[1]);
+                el_url2.value = in_rules[i].url+escape(r[1]);
                 click2copy();
                 break;
             }
         }
     });
 
-    for(i=0;i<rules.length;i++){
-        r = window.location.search.match(rules[i].redirect_exp);
+    for(i=0;i<out_rules.length;i++){
+        r = window.location.search.match(out_rules[i].exp);
         if(r&&r.length>=2){
             setTimeout(function(){
-                el_link.href = rules[i].redirect_url+unescape(r[1]).replace(/&fbclid=.*/,"");
+                el_link.href = out_rules[i].url+unescape(r[1]).replace(/&fbclid=.*/,"");
                 el_div3.classList.remove('d-none');
             },3000);
             el_div1.classList.add('d-none');
