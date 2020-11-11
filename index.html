@@ -40,7 +40,7 @@ var r ;
 var in_rules = [
     {
         exp:/https:\/\/gtv\.org\/?\?videoid=(.*)/,
-        url:"https://nobubattle.github.io/g_redirect/?gtv=video/id=",
+        url:"https://nobubattle.github.io/g_redirect/?gtv=video/id%3D",
     },
     {
         exp:/https:\/\/gtv\.org\/?(.*)/,
@@ -54,7 +54,7 @@ var in_rules = [
 var out_rules = [
     {
         exp:/\?gtv=\/?%3Fvideoid%3D(.*)/,
-        url:"https://gtv.org/video/id="
+        url:"https://gtv.org/video/id"
     },
     {
         exp:/\?gtv=\/?(.*)/,
