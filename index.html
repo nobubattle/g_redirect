@@ -1,103 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirect</title>
-    <style>
-        .d-none{  display:none;  }
-        .text-center{text-align:center}
-        .w-80{width:80%;}
-        .my-3{margin-top:16px;margin-bottom:16px}
-        .form-input{height:24px;font-size:16px;}
-        .btn{ height:24px;font-size:16px;}
-        .h5{font-size:20px}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTV &amp; GNews - Redirect</title>
+<meta name="description" content="Whistleblower Movement Media">
+<style>
+body{ margin:0px; }
+.d-none{  display:none;  }
+.text-center{text-align:center}
+.w-80{width:80%;}
+.my-3{margin-top:16px;margin-bottom:16px}
+.mt-5{margin-top:64px;}
+.py-3{padding-top:16px;padding-bottom:16px;}
+.form-input{height:24px;font-size:16px;width:100%}
+.btn{ height:24px;font-size:16px;}
+.h5{font-size:20px}
+.container{ width:80%; margin-left:auto; margin-right:auto; }
+#div1,#div2,#div3{display:none}
+.active1 #div1,.active2 #div2,.active3 #div3{display:block;}
+</style>
 </head>
-<body>
-    <div class="text-center my-3" id="div1">
-        <br><br>
-        <input type="text" id="url" class="form-input w-80"> <br><br>
-        <button type="button" id="btn" class="btn">Convert &amp; Copy</button><br><br>
-        <input type="text" id="url2" class="form-input w-80"></div>
-    </div>
-    <div class="d-none text-center my-3 h5" id="div2">
-        Show redirect button after 3 seconds.
-    </div>
-    <div class="d-none text-center my-3" id="div3">
-        <a id="link" href="" target="_self" class="h5">Click Me To Redirect</a>
+<body onload="main()">
+    
+    <div class="container py-3" id="app">
+        <div class="text-center">
+            <img src="./images/gtv_gnews.png" alt="">
+        </div>
+        <div class="text-center">
+            <a href="https://gtv.org" target="_blank">G-TV</a> |
+            <a href="https://gnews.org" target="_blank">G-News</a>
+        </div>
+        <div class="text-center my-3" id="div1">
+            <input type="text" id="url" class="form-input"> <br><br>
+            <button type="button" id="btn" class="btn">Convert &amp; Copy</button><br><br>
+            <input type="text" id="url2" class="form-input">
+        </div>
+        <div class="text-center my-3 h5" id="div2">
+            <!-- Show redirect button after 3 seconds. -->
+        </div>
+        <div class="text-center mt-5" id="div3">
+            <a id="link" href="" target="_self" class="h5">Click Me To Redirect</a>
+        </div>
+        
     </div>
 
 <script>
-var el_btn = document.getElementById('btn');
-var el_url = document.getElementById('url');
-var el_url2 = document.getElementById('url2');
-var el_link = document.getElementById('link');
-var el_div1 = document.getElementById('div1');
-var el_div2 = document.getElementById('div2');
-var el_div3 = document.getElementById('div3');
-var r ;
-var in_rules = [
-    {
-        exp:/https:\/\/gtv\.org\/?\?videoid=(.*)/,
-        url:"https://nobubattle.github.io/g_redirect/?gtv=video/id%3D",
-    },
-    {
-        exp:/https:\/\/gtv\.org\/?(.*)/,
-        url:"https://nobubattle.github.io/g_redirect/?gtv=",
-    },
-    {
-        exp:/https:\/\/gnews\.org\/?(.*)/,
-        url:"https://nobubattle.github.io/g_redirect/?gnews=",
+var InRule = function(exp, url){
+    this.exp = exp;
+    this.url = url;
+}
+// InRule.prototype.match = function(url){
+//     var res = url.match(this.exp);
+//     return res && res.length>=2 ? res[1] : null;
+// }
+// InRule.prototype.convert = function(text){
+//     var url = this.url+escape(text);
+//     return url;
+// }
+InRule.prototype.convert = function(url){
+    var res = url.match(this.exp);
+    var text = res && res.length>=2 ? res[1] : null;
+    return text ? this.url+escape(text) : null;
+}
+var InRuleService = function(rules){
+    this.rules = rules;
+}
+InRuleService.prototype.convert = function(url){
+    var result;
+    for(var i=0; i< this.rules.length ; i++){
+        result = this.rules[i].convert(url);
+        if(result)
+            break;
     }
-];
-var out_rules = [
-    {
-        exp:/\?gtv=\/?%3Fvideoid%3D(.*)/,
-        url:"https://gtv.org/video/id="
-    },
-    {
-        exp:/\?gtv=\/?(.*)/,
-        url:"https://gtv.org/"
-    },
-    {
-        exp:/\?gnews=\/?(.*)/,
-        url:"https://gnews.org/"
-    }
-];
+    return result;
+}
 
-(function(){
-
-    el_btn.addEventListener('click', function(){
-        for(i=0;i<in_rules.length;i++){
-            r = el_url.value.match(in_rules[i].exp);
-            if(r&&r.length>=2){
-                el_url2.value = in_rules[i].url+escape(r[1]);
-                click2copy();
-                break;
-            }
-        }
-    });
-
-    for(i=0;i<out_rules.length;i++){
-        r = window.location.search.match(out_rules[i].exp);
-        if(r&&r.length>=2){
-            setTimeout(function(){
-                el_link.href = out_rules[i].url+unescape(r[1]).replace(/&fbclid=.*/,"");
-                el_div3.classList.remove('d-none');
-            },3000);
-            el_div1.classList.add('d-none');
-            el_div2.classList.remove('d-none');
-            break ;
+var OutRule = function(exp, url){
+    this.exp = exp;
+    this.url = url;
+}
+// OutRule.prototype.match = function(url){
+//     var res = url.match(this.exp);
+//     return res && res.length>=2 ? res[1] : null;
+// }
+// OutRule.prototype.convert = function(text){
+//     var url = this.url+unescape(text).replace(/&fbclid=.*/,"");
+//     return url;
+// }
+OutRule.prototype.convert = function(url){
+    var res = url.match(this.exp);
+    var text =  res && res.length>=2 ? res[1] : null;
+    return text ? this.url+unescape(text).replace(/&fbclid=.*/,"") : null;
+}
+var OutRuleService = function(rules){
+    this.rules = rules;
+}
+OutRuleService.prototype.convert = function(url){
+    var result;
+    for(var i=0; i< this.rules.length ; i++){
+        result = this.rules[i].convert(url);
+        if(result){
+            break;
         }
     }
-})();
-    
-function click2copy() {
+    return result;
+}
+
+var click2copy = function(){
     el_url2.select();
     el_url2.setSelectionRange(0, 99999);
     document.execCommand("copy");
 }
+
+var in_rules = [];
+in_rules.push(new InRule(/https:\/\/gtv\.org\/?\?videoid=(.*)/, "https://nobubattle.github.io/g_redirect/?gtv=video/id%3D"))
+in_rules.push(new InRule(/https:\/\/gtv\.org\/?(.*)/, "https://nobubattle.github.io/g_redirect/?gtv="));
+in_rules.push(new InRule(/https:\/\/gnews\.org\/?(.*)/,"https://nobubattle.github.io/g_redirect/?gnews="));
+
+var out_rules = [];
+out_rules.push(new OutRule(/\?gtv=\/?%3Fvideoid%3D(.*)/, "https://gtv.org/video/id="));
+out_rules.push(new OutRule(/\?gtv=\/?(.*)/, "https://gtv.org/"));
+out_rules.push(new OutRule(/\?gnews=\/?(.*)/,"https://gnews.org/"));
+
+var el_app = document.getElementById('app');
+var el_btn = document.getElementById('btn');
+var el_url = document.getElementById('url');
+var el_url2 = document.getElementById('url2');
+var el_link = document.getElementById('link');
+
+el_btn.addEventListener('click', function(){
+    var service = new InRuleService(in_rules);
+    var url = service.convert(el_url.value);
+    if(url){
+        el_url2.value = url;
+        click2copy();
+    }
+})
+
+var main = function(){
+    var service = new OutRuleService(out_rules);
+    var url = service.convert(window.location.search);
+    if(url){
+        el_app.classList.add('active2');
+        el_app.classList.add('active3');
+        // setTimeout(function(){
+        //     el_link.href = url;
+        //     el_div3.classList.remove('d-none');
+        // },3000);
+        el_link.href = url;
+        el_link.text = url;
+    }
+    else{
+        el_app.classList.add('active1');
+    }
+}
+
 </script>
 </body>
 </html>
