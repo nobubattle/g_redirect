@@ -22,34 +22,36 @@ body{ margin:0px; }
 .my-3{margin-top:16px;margin-bottom:16px}
 .mt-5{margin-top:64px;}
 .py-3{padding-top:16px;padding-bottom:16px;}
+.px-2{padding-left:8px;padding-right:8px;}
+.px-3{padding-left:16px;padding-right:16px;}
 .form-input{height:24px;font-size:16px;width:100%}
 .btn{ height:24px;font-size:16px;}
 .h5{font-size:20px}
-.container{ width:80%; margin-left:auto; margin-right:auto; }
-#div1,#div2,#div3{display:none}
-.active1 #div1,.active2 #div2,.active3 #div3{display:block;}
+.container-lg{ width:80%; max-width:1140px ;margin-left:auto; margin-right:auto; }
+#div1,#div2{display:none}
+.active1 #div1,.active2 #div2{display:block;}
 .img-fluid{max-width:100%;height:auto}
+a{text-decoration:none;color:#000}
+a:hover{text-decoration:underline;color:#00f}
 </style>
 </head>
 <body onload="main()">
     
-    <div class="container py-3" id="app">
+    <div class="container-lg py-3" id="app">
         <div class="text-center">
-            <img src="./images/gtv_gnews7.png" alt="" class="img-fluid">
+            <img src="./images/gtv_gnews8.png" alt="" class="img-fluid">
         </div>
         <div class="text-center">
-            <a href="https://gtv.org" target="_blank">G-TV</a> |
+            <a href="https://gtv.org" target="_blank">G-TV</a>
+            <span class="px-2">|</span>
             <a href="https://gnews.org" target="_blank">G-News</a>
         </div>
         <div class="text-center my-3" id="div1">
-            <input type="text" id="url" class="form-input"> <br><br>
+            <input type="text" id="url" class="form-input" placeholder="https://gnews.org/zh-hant/"> <br><br>
             <button type="button" id="btn" class="btn">Convert &amp; Copy</button><br><br>
             <input type="text" id="url2" class="form-input">
         </div>
-        <div class="text-center my-3 h5" id="div2">
-            <!-- Show redirect button after 3 seconds. -->
-        </div>
-        <div class="text-center mt-5" id="div3">
+        <div class="text-center mt-5" id="div2">
             <a id="link" href="" target="_self" class="h5">Click Me To Redirect</a>
         </div>
         
@@ -60,14 +62,6 @@ var InRule = function(exp, url){
     this.exp = exp;
     this.url = url;
 }
-// InRule.prototype.match = function(url){
-//     var res = url.match(this.exp);
-//     return res && res.length>=2 ? res[1] : null;
-// }
-// InRule.prototype.convert = function(text){
-//     var url = this.url+escape(text);
-//     return url;
-// }
 InRule.prototype.convert = function(url){
     var res = url.match(this.exp);
     var text = res && res.length>=2 ? res[1] : null;
@@ -90,14 +84,6 @@ var OutRule = function(exp, url){
     this.exp = exp;
     this.url = url;
 }
-// OutRule.prototype.match = function(url){
-//     var res = url.match(this.exp);
-//     return res && res.length>=2 ? res[1] : null;
-// }
-// OutRule.prototype.convert = function(text){
-//     var url = this.url+unescape(text).replace(/&fbclid=.*/,"");
-//     return url;
-// }
 OutRule.prototype.convert = function(url){
     var res = url.match(this.exp);
     var text =  res && res.length>=2 ? res[1] : null;
@@ -142,6 +128,7 @@ var el_link = document.getElementById('link');
 el_btn.addEventListener('click', function(){
     var service = new InRuleService(in_rules);
     var url = service.convert(el_url.value);
+    el_url2.value = "";
     if(url){
         el_url2.value = url;
         click2copy();
@@ -153,11 +140,6 @@ var main = function(){
     var url = service.convert(window.location.search);
     if(url){
         el_app.classList.add('active2');
-        el_app.classList.add('active3');
-        // setTimeout(function(){
-        //     el_link.href = url;
-        //     el_div3.classList.remove('d-none');
-        // },3000);
         el_link.href = url;
         el_link.text = url;
     }
