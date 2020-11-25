@@ -20,13 +20,15 @@ body{ margin:0px; }
 .text-center{text-align:center}
 .w-80{width:80%;}
 .my-3{margin-top:16px;margin-bottom:16px}
+.mt-3{margin-top:16px}
 .mt-5{margin-top:64px;}
+.p-2{padding:8px}
 .py-3{padding-top:16px;padding-bottom:16px;}
 .px-2{padding-left:8px;padding-right:8px;}
 .px-3{padding-left:16px;padding-right:16px;}
-.form-input{height:24px;font-size:16px;width:100%}
-.btn{ height:24px;font-size:16px;}
-.h5{font-size:20px}
+.form-input{height:24px;font-size:1.5rem;width:100%}
+.btn{ font-size:1.5rem;}
+.h5{font-size:1.5rem}
 .container-lg{ width:80%; max-width:1140px ;margin-left:auto; margin-right:auto; }
 #div1,#div2{display:none}
 .active1 #div1,.active2 #div2{display:block;}
@@ -42,9 +44,9 @@ a:hover{text-decoration:underline;color:#00f}
             <img src="./images/gtv_gnews8.png" alt="" class="img-fluid">
         </div>
         <div class="text-center">
-            <a href="https://gtv.org" target="_blank">G-TV</a>
-            <span class="px-2">|</span>
-            <a href="https://gnews.org" target="_blank">G-News</a>
+            <a href="https://gtv.org" class="h5" target="_blank">G-TV</a>
+            <span class="px-2 h5">|</span>
+            <a href="https://gnews.org" class="h5" target="_blank">G-News</a>
         </div>
         <div class="text-center my-3" id="div1">
             <input type="text" id="url" class="form-input" placeholder="https://gnews.org/zh-hant/"> <br><br>
@@ -52,7 +54,12 @@ a:hover{text-decoration:underline;color:#00f}
             <input type="text" id="url2" class="form-input">
         </div>
         <div class="text-center mt-5" id="div2">
-            <a id="link" href="" target="_self" class="h5">Click Me To Redirect</a>
+            <div>
+                <a id="link" class="h5" href="" target="_self"></a>
+            </div>
+            <div class="mt-5">
+                <button id="btn_clear" class="btn">Clear</button>
+            </div>
         </div>
         
     </div>
@@ -124,6 +131,12 @@ var el_btn = document.getElementById('btn');
 var el_url = document.getElementById('url');
 var el_url2 = document.getElementById('url2');
 var el_link = document.getElementById('link');
+var el_btn_clear = document.getElementById('btn_clear');
+
+el_btn_clear.addEventListener('click', function(){
+    el_app.classList.remove('active2');
+    el_app.classList.add('active1');
+})
 
 el_btn.addEventListener('click', function(){
     var service = new InRuleService(in_rules);
